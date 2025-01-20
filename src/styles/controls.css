@@ -1,0 +1,89 @@
+.game-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.mode-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  color: #333;
+}
+
+.mode-option input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.mode-option input[type="checkbox"]:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.checkbox-text {
+  font-size: 16px;
+}
+
+.score {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+button {
+  padding: 12px 24px;
+  font-size: 18px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  min-width: 120px;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+  background-color: #45a049;
+}
+
+.game-over {
+  font-size: 24px;
+  color: #f44336;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+@media (max-width: 480px) {
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    min-width: 100px;
+  }
+  
+  .score {
+    font-size: 20px;
+  }
+  
+  .game-over {
+    font-size: 20px;
+  }
+}
