@@ -104,9 +104,9 @@ export class AudioManager {
     AudioManager.isLoading = true;
     try {
       const soundFiles = {
-        background: '/sounds/background.mp3',
-        eat: '/sounds/eat.mp3',
-        gameOver: '/sounds/gameover.mp3'
+        background: './sounds/background.mp3',
+        eat: './sounds/eat.mp3',
+        gameOver: './sounds/gameover.mp3'
       };
 
       const loadAudio = async (url) => {
