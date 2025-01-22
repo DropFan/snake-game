@@ -1,0 +1,17 @@
+{
+  "name": "贪吃蛇",
+  "short_name": "贪吃蛇",
+  "description": "经典贪吃蛇游戏，支持键盘和触摸控制",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#242424",
+  "theme_color": "#242424",
+  "icons": [
+    {
+      "src": "snake.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
