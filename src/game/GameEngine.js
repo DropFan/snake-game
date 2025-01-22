@@ -24,7 +24,7 @@ export class GameEngine {
     
     this.gameLoop = null // 游戏循环定时器
     this.onUpdate = null // 游戏状态更新回调函数
-    this.audioManager = new AudioManager()
+    this.audioManager = AudioManager.getInstance()
   }
 
   /**
