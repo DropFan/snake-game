@@ -3,19 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    <link rel="manifest" href="/manifest.json">
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+    <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#242424">
     <title>贪吃蛇 v1.0</title>
-    <script type="module" crossorigin src="/assets/index-z2-wSYRL.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-Bxl4G2xK.css">
+    <script type="module" crossorigin src="./assets/index-z2-wSYRL.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-Bxl4G2xK.css">
   </head>
   <body>
     <div id="app"></div>
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
+          navigator.serviceWorker.register('./sw.js')
             .then(registration => {
               console.log('ServiceWorker registration successful');
             })
