@@ -14,10 +14,11 @@ export class GameController {
     this.lastDirectionChange = 0
     this.onDirectionChange = null
     this.onPause = null
-    
+    this.onStop = null
+
     this.touchStartX = 0
     this.touchStartY = 0
-    
+
     // 绑定方法到实例
     this.handleKeydown = this.handleKeydown.bind(this)
     this.handleTouchStart = this.handleTouchStart.bind(this)
@@ -76,6 +77,10 @@ export class GameController {
         e.preventDefault()
         if (this.onPause) this.onPause()
         break
+      case 'Escape':
+        e.preventDefault()
+        if (this.onStop) this.onStop()
+        break
     }
 
     if (newDirection && this.onDirectionChange) {
@@ -102,7 +107,7 @@ export class GameController {
    */
   handleTouchMove(e) {
     e.preventDefault()
-    
+
     const now = Date.now()
     if (now - this.lastDirectionChange < this.directionCooldown) return
 

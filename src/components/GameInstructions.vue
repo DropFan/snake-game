@@ -19,6 +19,7 @@
             <li>← 向左移动</li>
             <li>→ 向右移动</li>
             <li>空格键 暂停/继续</li>
+            <li>Esc 结束游戏</li>
           </ul>
         </div>
         <div class="control-item">

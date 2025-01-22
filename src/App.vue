@@ -3,7 +3,7 @@
  * 贪吃蛇游戏主组件
  * 负责管理游戏状态、用户界面渲染、用户输入控制和游戏设置
  * 整合了游戏引擎、控制器和渲染器三个核心模块
- * 
+ *
  * 主要功能：
  * - 游戏状态管理：分数、游戏结束、暂停等状态
  * - 画布渲染：自适应大小的游戏画布
@@ -23,12 +23,21 @@ import GameTitle from './components/GameTitle.vue'
 // 游戏状态管理
 // 使用Vue的响应式系统来追踪游戏的各种状态
 const score = ref(0)                  // 当前游戏得分
+const gameRunning = ref(false)        // 游戏是否正在运行
 const gameOver = ref(false)           // 游戏是否结束
 const isPaused = ref(false)           // 游戏是否暂停
 const boundaryMode = ref(true)        // 边界模式：true为撞墙死亡，false为穿墙
 const bgMusicEnabled = ref(AudioManager.bgMusicEnabled)      // 背景音乐开关状态
 const soundEffectsEnabled = ref(AudioManager.soundEffectsEnabled) // 音效开关状态
 const speedPercentage = ref(50)       // 游戏速度百分比，0%最慢，100%最快
+
+// 游戏状态管理函数
+const handleGameStateChange = (state) => {
+  score.value = state.score
+  gameOver.value = state.gameOver
+  isPaused.value = state.isPaused
+  gameRunning.value = !state.gameOver
+}
 
 // 游戏核心配置参数
 const GRID_SIZE = 20                  // 游戏网格大小，决定游戏区域的网格数量
@@ -83,10 +92,13 @@ const updateCanvasSize = () => {
  * 处理游戏结束模态框的关闭事件
  * @description 重置游戏状态并停止游戏引擎，清理相关实例
  */
-const handleCloseModal = () => {
+const handleStopGame = () => {
   gameOver.value = false
-  if (gameEngine) gameEngine.stop()
-  gameEngine = null
+  gameRunning.value = false
+  if (gameEngine) {
+    gameEngine.stop()
+    gameEngine = null
+  }
 }
 
 /**
@@ -101,47 +113,46 @@ const handleCloseModal = () => {
  */
 const startGame = () => {
   if (gameEngine) gameEngine.stop()
-  
+
   // 重置游戏状态
   gameOver.value = false
   score.value = 0
   isPaused.value = false
-  
+
   // 初始化游戏引擎
   gameEngine = new GameEngine({
     gridSize: GRID_SIZE,
     gameSpeed: GameConfig.MIN_GAME_SPEED - (speedPercentage.value / 100) * (GameConfig.MIN_GAME_SPEED - GameConfig.MAX_GAME_SPEED),
     boundaryMode: boundaryMode.value
   })
-  
+
   // 设置游戏状态更新回调
   gameEngine.onUpdate = (state) => {
-    score.value = state.score
-    gameOver.value = state.gameOver
+    handleGameStateChange(state)
     gameRenderer.render(state)
   }
-  
+
   // 初始化控制器
   if (!gameController) {
     gameController = new GameController({
       directionCooldown: DIRECTION_COOLDOWN
     })
-    
+
     gameController.onDirectionChange = (direction) => {
       if (gameEngine) gameEngine.setDirection(direction)
     }
-    
+
     gameController.onPause = () => {
-      if (gameEngine) {
-        gameEngine.pause()
-        const state = gameEngine.gameState.getState()
-        isPaused.value = state.isPaused
-      }
+      if (gameEngine) gameEngine.pause()
     }
-    
+
+    gameController.onStop = () => {
+      if (gameEngine) gameEngine.stop()
+    }
+
     gameController.init()
   }
-  
+
   // 初始化渲染器
   if (!gameRenderer) {
     gameRenderer = new GameRenderer(canvas.value, {
@@ -152,6 +163,8 @@ const startGame = () => {
 
   // 开始游戏
   gameEngine.start()
+
+  gameRunning = true
 
   // 初始化音频状态
   gameEngine.audioManager.init()
@@ -168,6 +181,7 @@ onMounted(() => {
 onUnmounted(() => {
   if (gameEngine) gameEngine.stop()
   if (gameController) gameController.destroy()
+  if (gameRenderer) gameRenderer.clear()
   window.removeEventListener('resize', updateCanvasSize)
 })
 </script>
@@ -181,9 +195,17 @@ onUnmounted(() => {
     <div class="game-controls">
       <div class="score">得分: {{ score }}</div>
 
+      <!-- :disabled="gameEngine && (!gameOver)" -->
       <div class="button-group">
-        <button @click="startGame" :disabled="gameEngine && (!gameOver || !gameEngine.gameLoop)">开始游戏</button>
-        <button @click="gameEngine?.pause()" :disabled="!gameEngine || !gameEngine.gameLoop || gameOver">
+        <button @click="gameRunning ? handleStopGame() : startGame()"
+          :class="gameRunning? 'end-game':'start-game'"
+        >
+          {{ gameRunning ? '结束游戏':'开始游戏' }}
+        </button>
+        <button @click="gameEngine?.pause()"
+          :disabled="!gameEngine || !gameEngine.gameLoop || gameOver"
+          :class="isPaused ? 'resume-game' : 'pause-game'"
+        >
           {{ isPaused ? '继续' : '暂停' }}
         </button>
       </div>
@@ -192,20 +214,13 @@ onUnmounted(() => {
         <div class="settings-section">
           <h3>游戏设置</h3>
           <label class="setting-item">
-            <input type="checkbox" v-model="boundaryMode" :disabled="gameEngine && !gameOver">
+            <input type="checkbox" v-model="boundaryMode" :disabled="gameRunning">
             <span class="setting-text">启用边界模式（撞墙结束游戏）</span>
           </label>
           <div class="setting-item speed-setting">
             <span class="setting-text">游戏速度</span>
-            <input 
-              type="range" 
-              v-model="speedPercentage" 
-              :min="0" 
-              :max="100" 
-              :step="1"
-              @input="updateGameSpeed(speedPercentage)"
-              :disabled="gameEngine && !gameOver && !isPaused"
-            >
+            <input type="range" v-model="speedPercentage" :min="0" :max="100" :step="1"
+              @input="updateGameSpeed(speedPercentage)" :disabled="gameRunning">
             <span class="speed-value">{{ speedPercentage }}%</span>
           </div>
         </div>
@@ -223,7 +238,7 @@ onUnmounted(() => {
         </div>
       </div>
     </div>
-    
+
     <!-- 游戏结束弹窗 -->
     <div v-if="gameOver" class="modal-overlay">
       <div class="modal-content">
@@ -231,7 +246,7 @@ onUnmounted(() => {
         <div class="modal-score">得分: {{ score }}</div>
         <div class="modal-buttons">
           <button class="modal-button primary" @click="startGame">重新开始</button>
-          <button class="modal-button secondary" @click="handleCloseModal">关闭</button>
+          <button class="modal-button secondary" @click="handleStopGame">关闭</button>
         </div>
       </div>
     </div>
