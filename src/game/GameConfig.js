@@ -3,6 +3,8 @@ export const GameConfig = {
   // 游戏核心配置
   GRID_SIZE: 20,
   GAME_SPEED: 100,
+  MIN_GAME_SPEED: 200,  // 最慢速度（毫秒）
+  MAX_GAME_SPEED: 50,   // 最快速度（毫秒）
   DIRECTION_COOLDOWN: 100,
 
   // 画布配置
@@ -20,7 +22,7 @@ export const GameConfig = {
 
   // 颜色配置
   COLORS: {
-    background: '#000',
+    background: '#333',
     snake: '#4CAF50',
     food: '#FF5722'
   }
