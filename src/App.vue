@@ -12,6 +12,7 @@
  */
 
 import { ref, onMounted, onUnmounted } from 'vue'
+import { AudioManager } from './game/audioManager'
 import { GameEngine } from './game/GameEngine'
 import { GameController } from './game/GameController'
 import { GameRenderer } from './game/GameRenderer'
@@ -25,8 +26,8 @@ const score = ref(0)                  // 当前游戏得分
 const gameOver = ref(false)           // 游戏是否结束
 const isPaused = ref(false)           // 游戏是否暂停
 const boundaryMode = ref(true)        // 边界模式：true为撞墙死亡，false为穿墙
-const bgMusicEnabled = ref(true)      // 背景音乐开关状态
-const soundEffectsEnabled = ref(true) // 音效开关状态
+const bgMusicEnabled = ref(AudioManager.bgMusicEnabled)      // 背景音乐开关状态
+const soundEffectsEnabled = ref(AudioManager.soundEffectsEnabled) // 音效开关状态
 const speedPercentage = ref(50)       // 游戏速度百分比，0%最慢，100%最快
 
 // 游戏核心配置参数
@@ -148,17 +149,12 @@ const startGame = () => {
       cellSize: CELL_SIZE.value
     })
   }
-  
+
   // 开始游戏
   gameEngine.start()
-  
-  // 设置音频状态
-  if (bgMusicEnabled.value) {
-    gameEngine.audioManager.toggleBackgroundMusic()
-  }
-  if (soundEffectsEnabled.value) {
-    gameEngine.audioManager.toggleSoundEffects()
-  }
+
+  // 初始化音频状态
+  gameEngine.audioManager.init()
 }
 
 // Vue生命周期钩子
@@ -217,19 +213,11 @@ onUnmounted(() => {
         <div class="settings-section">
           <h3>音频设置</h3>
           <label class="setting-item">
-            <input type="checkbox" v-model="bgMusicEnabled" :disabled="!gameEngine" @change="() => {
-              if (gameEngine) {
-                gameEngine.audioManager.toggleBackgroundMusic()
-              }
-            }">
+            <input type="checkbox" v-model="bgMusicEnabled" @change="() => gameEngine?.audioManager.toggleBackgroundMusic()">
             <span class="setting-text">🔊 背景音乐</span>
           </label>
           <label class="setting-item">
-            <input type="checkbox" v-model="soundEffectsEnabled" :disabled="!gameEngine" @change="() => {
-              if (gameEngine) {
-                gameEngine.audioManager.toggleSoundEffects()
-              }
-            }">
+            <input type="checkbox" v-model="soundEffectsEnabled" @change="() => gameEngine?.audioManager.toggleSoundEffects()">
             <span class="setting-text">🔊 音效</span>
           </label>
         </div>

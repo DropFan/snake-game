@@ -1,6 +1,6 @@
 /**
  * 音频管理类 - 负责处理游戏中的所有音频效果
- * 
+ *
  * 使用单例模式确保全局只有一个音频管理实例
  * 实现了背景音乐和音效的加载、播放、暂停等功能
  * 支持音频的开关控制，包括全局静音、背景音乐开关和音效开关
@@ -17,6 +17,14 @@ export class AudioManager {
   /** @type {boolean} 标记音频管理器是否已初始化 */
   static isInitialized = false;
 
+  /** 音频设置相关项 */
+  /** @type {boolean} 全局静音开关*/
+  static isMuted = false;
+  /** @type {boolean} 背景音乐开关 */
+  static bgMusicEnabled = true;
+  /** @type {boolean} 音效开关 */
+  static soundEffectsEnabled= true;
+
   /**
    * 获取AudioManager的单例实例
    * @returns {AudioManager} AudioManager的单例实例
@@ -32,15 +40,19 @@ export class AudioManager {
    * 如果实例已存在则返回已有实例（单例模式）
    * 否则初始化音频上下文和加载音频资源
    */
-  constructor() {
+  constructor(settings = {
+    isMuted: false,
+    bgMusicEnabled: true,
+    soundEffectsEnabled: true
+  }) {
     if (AudioManager.instance) {
       return AudioManager.instance;
     }
 
     this.bgMusic = null;
-    this.isMuted = false;
-    this.bgMusicEnabled = true;
-    this.soundEffectsEnabled = true;
+    this.isMuted = settings.isMuted;
+    this.bgMusicEnabled = settings.bgMusicEnabled;
+    this.soundEffectsEnabled = settings.soundEffectsEnabled;
 
     if (!AudioManager.isInitialized) {
       this.initAudioContext();
@@ -199,3 +211,5 @@ export class AudioManager {
     return this.soundEffectsEnabled;
   }
 }
+
+AudioManager.getInstance();
