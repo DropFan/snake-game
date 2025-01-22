@@ -9,7 +9,13 @@
   <div class="game-instructions">
     <h2>玩法说明</h2>
     <div class="instruction-content">
-      <p>使用键盘方向键或触摸滑动控制蛇的移动方向，吃到食物可以得分。</p>
+      <p>
+        贪吃蛇游戏是一个经典的益智类游戏，玩家控制一条蛇在一个方格网格中移动，通过吃掉食物来增加自身长度获得分数，同时避免碰到障碍物或自己的身体。
+        <br>
+      </p>
+      <p>使用键盘方向键控制蛇的移动方向，触摸屏设备可以在游戏区域内触摸滑动控制。
+        <br>
+      </p>
       <div class="controls-info">
         <div class="control-item">
           <strong>键盘控制：</strong>

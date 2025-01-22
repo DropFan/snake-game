@@ -9,19 +9,36 @@
  */
 import { GameConfig } from './GameConfig'
 
+/**
+ * 游戏结束原因枚举
+ * @readonly
+ * @enum {string}
+ */
+export const GameOverType = {
+  NONE: 'none',           // 未结束
+  HIT_WALL: 'hitWall',    // 撞墙
+  HIT_SELF: 'hitSelf',    // 撞到自己
+  USER_STOP: 'userStop'    // 用户停止游戏
+}
+
 export class GameState {
   /**
    * 初始化游戏状态
    * @constructor
    */
   constructor() {
-    this.score = 0                                     // 游戏得分
+    this.score = 0                                    // 游戏得分
     this.gameOver = false                             // 游戏是否结束
     this.isPaused = false                             // 游戏是否暂停
+
     this.snake = [GameConfig.INITIAL_SNAKE_POSITION]  // 蛇身体位置数组，第一个元素为蛇头
-    this.direction = GameConfig.INITIAL_DIRECTION      // 蛇的移动方向
+    this.direction = GameConfig.INITIAL_DIRECTION     // 蛇的移动方向
     this.food = GameConfig.INITIAL_FOOD_POSITION      // 食物位置
+
     this.boundaryMode = true                          // 边界模式：true为撞墙死亡，false为穿墙
+    this.bgMusicEnabled = true                        // 背景音乐开关状态
+    this.soundEffectsEnabled = true                   // 音效开关状态
+    this.gameOverType = GameOverType.NONE             // 游戏结束原因
   }
 
   /**
@@ -34,6 +51,7 @@ export class GameState {
     this.isPaused = false
     this.snake = [GameConfig.INITIAL_SNAKE_POSITION]
     this.direction = GameConfig.INITIAL_DIRECTION
+    this.gameOverType = GameOverType.NONE
     this.generateFood()
   }
 
@@ -60,6 +78,17 @@ export class GameState {
    */
   setGameOver(value) {
     this.gameOver = value
+    if (!value) {
+      this.gameOverType = GameOverType.NONE
+    }
+  }
+
+  /**
+   * 设置游戏结束原因
+   * @param {GameOverType} reason - 游戏结束的原因
+   */
+  setGameOverType(reason) {
+    this.gameOverType = reason
   }
 
   /**
@@ -74,7 +103,7 @@ export class GameState {
       left: 'right',
       right: 'left'
     }
-    
+
     if (oppositeDirections[newDirection] !== this.direction) {
       this.direction = newDirection
     }
@@ -99,10 +128,10 @@ export class GameState {
         x: Math.floor(Math.random() * GameConfig.GRID_SIZE),
         y: Math.floor(Math.random() * GameConfig.GRID_SIZE)
       }
-    } while (this.snake.some(segment => 
+    } while (this.snake.some(segment =>
       segment.x === newFood.x && segment.y === newFood.y
     ))
-    
+
     this.food = newFood
   }
 
@@ -117,8 +146,13 @@ export class GameState {
       score: this.score,          // 当前分数
       gameOver: this.gameOver,    // 游戏是否结束
       isPaused: this.isPaused,    // 游戏是否暂停
-      direction: this.direction,   // 蛇的移动方向
-      boundaryMode: this.boundaryMode  // 边界模式
+      direction: this.direction,  // 蛇的移动方向
+
+      boundaryMode: this.boundaryMode,               // 边界模式
+      bgMusicEnabled: this.bgMusicEnabled,           // 背景音乐状态
+      soundEffectsEnabled: this.soundEffectsEnabled, // 音效状态
+
+      gameOverType: this.gameOverType  // 游戏结束原因
     }
   }
 }

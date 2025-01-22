@@ -1,5 +1,5 @@
 import { GameConfig } from './GameConfig'
-import { GameState } from './GameState'
+import { GameState, GameOverType } from './GameState'
 import { AudioManager } from './AudioManager'
 
 /**
@@ -159,7 +159,7 @@ export class GameEngine {
    * @returns {boolean} 是否发生碰撞
    */
   checkCollision(head) {
-    // 非边界模式：穿墙
+    // 无边界模式：穿墙
     if (!this.gameState.boundaryMode) {
       if (head.x < 0) head.x = GameConfig.GRID_SIZE - 1
       if (head.x >= GameConfig.GRID_SIZE) head.x = 0
@@ -167,19 +167,25 @@ export class GameEngine {
       if (head.y >= GameConfig.GRID_SIZE) head.y = 0
     }
 
-    // 边界模式：检查是否撞墙
+    // 有边界模式：检查是否撞墙
     if (this.gameState.boundaryMode && (
       head.x < 0 ||
       head.x >= GameConfig.GRID_SIZE ||
       head.y < 0 ||
       head.y >= GameConfig.GRID_SIZE
     )) {
+      this.gameState.setGameOverType(GameOverType.HIT_WALL)
       return true
     }
 
     // 检查是否撞到自己
-    return this.gameState.snake.some(segment =>
+    const hitSelf = this.gameState.snake.some(segment =>
       segment.x === head.x && segment.y === head.y
     )
+    if (hitSelf) {
+      this.gameState.setGameOverType(GameOverType.HIT_SELF)
+    }
+
+    return hitSelf
   }
 }

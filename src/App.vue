@@ -17,8 +17,11 @@ import { GameEngine } from './game/GameEngine'
 import { GameController } from './game/GameController'
 import { GameRenderer } from './game/GameRenderer'
 import { GameConfig } from './game/GameConfig'
-import GameInstructions from './components/GameInstructions.vue'
+import { GameOverType } from './game/GameState'
+import { GameStorage } from './game/GameStorage'
+
 import GameTitle from './components/GameTitle.vue'
+import GameInstructions from './components/GameInstructions.vue'
 
 // 游戏状态管理
 // 使用Vue的响应式系统来追踪游戏的各种状态
@@ -30,6 +33,7 @@ const boundaryMode = ref(true)        // 边界模式：true为撞墙死亡，fa
 const bgMusicEnabled = ref(AudioManager.bgMusicEnabled)      // 背景音乐开关状态
 const soundEffectsEnabled = ref(AudioManager.soundEffectsEnabled) // 音效开关状态
 const speedPercentage = ref(50)       // 游戏速度百分比，0%最慢，100%最快
+const gameOverMessage = ref('')       // 游戏结束原因
 
 // 游戏状态管理函数
 const handleGameStateChange = (state) => {
@@ -37,6 +41,22 @@ const handleGameStateChange = (state) => {
   gameOver.value = state.gameOver
   isPaused.value = state.isPaused
   gameRunning.value = !state.gameOver
+
+  if (state.gameOver) {
+    switch (state.gameOverType) {
+      case GameOverType.HIT_WALL:
+        gameOverMessage.value = '撞到墙壁了！'
+        break
+      case GameOverType.HIT_SELF:
+        gameOverMessage.value = '咬到自己了！'
+        break
+      case GameOverType.USER_STOP:
+        gameOverMessage.value = '玩家主动结束'
+        break
+      default:
+        gameOverMessage.value = ''
+    }
+  }
 }
 
 // 游戏核心配置参数
@@ -164,10 +184,7 @@ const startGame = () => {
   // 开始游戏
   gameEngine.start()
 
-  gameRunning = true
-
-  // 初始化音频状态
-  gameEngine.audioManager.init()
+  gameRunning.value = true
 }
 
 // Vue生命周期钩子
@@ -244,6 +261,8 @@ onUnmounted(() => {
       <div class="modal-content">
         <h2 class="modal-title">游戏结束</h2>
         <div class="modal-score">得分: {{ score }}</div>
+        <div class="modal-message">{{ gameOverMessage }}</div>
+        <div class="modal-boundary-mode">{{ boundaryMode ? '边界模式：有边界(撞墙结束)' : '边界模式：无边界(循环模式)' }}</div>
         <div class="modal-buttons">
           <button class="modal-button primary" @click="startGame">重新开始</button>
           <button class="modal-button secondary" @click="handleStopGame">关闭</button>
