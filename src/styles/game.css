@@ -10,39 +10,6 @@
   box-sizing: border-box;
 }
 
-.game-title {
-  width: 100%;
-  text-align: center;
-  margin: 20px 0;
-}
-
-.game-title {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.snake-logo {
-  animation: wiggle 2s ease-in-out infinite;
-}
-
-@keyframes wiggle {
-  0%, 100% { transform: rotate(-5deg); }
-  50% { transform: rotate(5deg); }
-}
-
-.game-title h1 {
-  font-size: 28px;
-  color: #333;
-  margin: 0;
-}
-
-.game-title .version {
-  font-size: 16px;
-  color: #666;
-}
 
 .game-canvas {
   border: 2px solid #333;

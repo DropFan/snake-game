@@ -16,6 +16,8 @@ import { GameEngine } from './game/GameEngine'
 import { GameController } from './game/GameController'
 import { GameRenderer } from './game/GameRenderer'
 import { GameConfig } from './game/GameConfig'
+import GameInstructions from './components/GameInstructions.vue'
+import GameTitle from './components/GameTitle.vue'
 
 // 游戏状态管理
 // 使用Vue的响应式系统来追踪游戏的各种状态
@@ -177,29 +179,9 @@ onUnmounted(() => {
 <template>
   <!-- 游戏容器：包含标题、画布、控制面板和说明 -->
   <div class="game-container">
-    <!-- 游戏标题和Logo -->
-    <div class="game-title">
-      <svg class="snake-logo" width="40" height="40" viewBox="0 0 40 40">
-        <!-- 蛇身 -->
-        <rect x="8" y="8" width="8" height="8" rx="2" fill="#4CAF50" />
-        <rect x="16" y="8" width="8" height="8" rx="2" fill="#4CAF50" />
-        <rect x="24" y="8" width="8" height="8" rx="2" fill="#4CAF50" />
-        <!-- 蛇头 -->
-        <rect x="24" y="16" width="8" height="8" rx="2" fill="#388E3C" />
-        <!-- 蛇眼睛 -->
-        <circle cx="27" cy="19" r="1" fill="white" />
-        <!-- 食物 -->
-        <rect x="8" y="24" width="8" height="8" rx="2" fill="#FF5722" />
-      </svg>
-      <h1>贪吃蛇 <span class="version">v1.0</span></h1>
-    </div>
-    <canvas
-      ref="canvas"
-      :width="canvasSize"
-      :height="canvasSize"
-      class="game-canvas"
-    ></canvas>
-    
+    <GameTitle />
+    <canvas ref="canvas" :width="canvasSize" :height="canvasSize" class="game-canvas"></canvas>
+
     <div class="game-controls">
       <div class="score">得分: {{ score }}</div>
 
@@ -265,41 +247,14 @@ onUnmounted(() => {
         </div>
       </div>
     </div>
-    
-    <div class="game-instructions">
-      <h2>玩法说明</h2>
-      <div class="instruction-content">
-        <p>使用键盘方向键或触摸滑动控制蛇的移动方向，吃到食物可以得分。</p>
-        <div class="controls-info">
-          <div class="control-item">
-            <strong>键盘控制：</strong>
-            <ul>
-              <li>↑ 向上移动</li>
-              <li>↓ 向下移动</li>
-              <li>← 向左移动</li>
-              <li>→ 向右移动</li>
-              <li>空格键 暂停/继续</li>
-            </ul>
-          </div>
-          <div class="control-item">
-            <strong>触摸控制：</strong>
-            <ul>
-              <li>向上滑动 - 向上移动</li>
-              <li>向下滑动 - 向下移动</li>
-              <li>向左滑动 - 向左移动</li>
-              <li>向右滑动 - 向右移动</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
+
+    <GameInstructions />
   </div>
 </template>
 
 <style scoped>
 @import './styles/game.css';
 @import './styles/controls.css';
-@import './styles/instructions.css';
 @import './styles/modal.css';
 @import './styles/settings.css';
 </style>
