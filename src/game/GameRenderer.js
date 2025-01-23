@@ -59,13 +59,15 @@ export class GameRenderer {
     
     // 绘制蛇身
     snake.forEach((segment, index) => {
-      // 绘制略小于单元格的方块，留出间隙以区分各个段落
-      this.ctx.fillRect(
-        segment.x * this.cellSize,
-        segment.y * this.cellSize,
-        this.cellSize - 1,
-        this.cellSize - 1
-      )
+      // 使用圆角矩形绘制蛇身段落
+      const x = segment.x * this.cellSize
+      const y = segment.y * this.cellSize
+      const size = this.cellSize - 1
+      const radius = size / 4 // 设置圆角半径
+      
+      this.ctx.beginPath()
+      this.ctx.roundRect(x, y, size, size, radius)
+      this.ctx.fill()
 
       // 绘制蛇头（蛇头是数组的第一个元素）
       if (index === 0 && snake.length > 1) {
@@ -220,12 +222,27 @@ export class GameRenderer {
    */
   drawFood(food) {
     if (!this.ctx) return
+  
+    const x = food.x * this.cellSize
+    const y = food.y * this.cellSize
+    const size = this.cellSize - 1
+    const radius = size / 4 // 设置圆角半径
+  
+    // 绘制圆角矩形背景
     this.ctx.fillStyle = this.colors.food
-    this.ctx.fillRect(
-      food.x * this.cellSize,
-      food.y * this.cellSize,
-      this.cellSize - 1,
-      this.cellSize - 1
+    this.ctx.beginPath()
+    this.ctx.roundRect(x, y, size, size, radius)
+    this.ctx.fill()
+
+    // 绘制食物emoji
+    this.ctx.font = `${this.cellSize * 0.7}px Arial`
+    this.ctx.textAlign = 'center'
+    this.ctx.textBaseline = 'middle'
+    this.ctx.fillStyle = '#000000'
+    this.ctx.fillText(
+      food.emoji,
+      x + size / 2,
+      y + size / 2
     )
   }
 

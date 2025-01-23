@@ -33,12 +33,19 @@ export class GameState {
 
     this.snake = [GameConfig.INITIAL_SNAKE_POSITION]  // 蛇身体位置数组，第一个元素为蛇头
     this.direction = GameConfig.INITIAL_DIRECTION     // 蛇的移动方向
-    this.food = GameConfig.INITIAL_FOOD_POSITION      // 食物位置
+    // 食物对象，包含位置和emoji
+    this.food = {
+      ...GameConfig.INITIAL_FOOD_POSITION,
+      emoji: null
+    }
 
     this.boundaryMode = true                          // 边界模式：true为撞墙死亡，false为穿墙
     this.bgMusicEnabled = true                        // 背景音乐开关状态
     this.soundEffectsEnabled = true                   // 音效开关状态
     this.gameOverType = GameOverType.NONE             // 游戏结束原因
+
+    // 食物emoji数组
+    this.foodEmojis = ['🍎', '🍐', '🍊', '🍋', '🍌', '🍉', '🍇', '🍓', '🍒', '🍑', '🥝', '🍅']
   }
 
   /**
@@ -132,7 +139,13 @@ export class GameState {
       segment.x === newFood.x && segment.y === newFood.y
     ))
 
-    this.food = newFood
+    // 创建新的食物对象
+    const randomIndex = Math.floor(Math.random() * this.foodEmojis.length)
+    this.food = {
+      x: newFood.x,
+      y: newFood.y,
+      emoji: this.foodEmojis[randomIndex]
+    }
   }
 
   /**
@@ -143,6 +156,7 @@ export class GameState {
     return {
       snake: this.snake,          // 蛇的位置数组
       food: this.food,            // 食物位置
+
       score: this.score,          // 当前分数
       gameOver: this.gameOver,    // 游戏是否结束
       isPaused: this.isPaused,    // 游戏是否暂停
