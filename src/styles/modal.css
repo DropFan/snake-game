@@ -38,8 +38,10 @@
   font-size: 1.1rem;
   margin-bottom: 1.5rem;
   color: #666;
-  font-style: italic;
+  /* font-style: italic; */
 }
+
+
 
 .modal-buttons {
   display: flex;

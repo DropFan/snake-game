@@ -1,6 +1,6 @@
 # Snake-game
 <div class="app-desc" style="text-align:center" align="center">
-    <a href="https://github.com/DropFan/snake-game?from=github-readme" target="_blank"><img src="./snake.png" width=128 height=128 alt="贪吃蛇 By Tiger https://github.com/DropFan" /></a>
+    <a href="https://snake-game.v2dl.net/?from=github-readme" target="_blank"><img src="./snake.png" width=128 height=128 alt="贪吃蛇 By Tiger https://github.com/DropFan" /></a>
     <h1>贪吃蛇</h1>
     <p>一个使用现代 Web 前端技术开发的经典贪吃蛇游戏。</p>
     <p>支持键盘和触摸控制，支持不同游戏模式和设置，支持背景音乐和游戏音效。</p>

@@ -22,6 +22,7 @@ import { GameStorage } from './game/GameStorage'
 
 import GameTitle from './components/GameTitle.vue'
 import GameInstructions from './components/GameInstructions.vue'
+import Footer from './components/Footer.vue'
 
 // 游戏状态管理
 // 使用Vue的响应式系统来追踪游戏的各种状态
@@ -262,7 +263,10 @@ onUnmounted(() => {
         <h2 class="modal-title">游戏结束</h2>
         <div class="modal-score">得分: {{ score }}</div>
         <div class="modal-message">{{ gameOverMessage }}</div>
-        <div class="modal-boundary-mode">{{ boundaryMode ? '边界模式：有边界(撞墙结束)' : '边界模式：无边界(循环模式)' }}</div>
+        <div class="modal-message modal-game-setting">
+          {{ boundaryMode ? '边界模式：有边界(撞墙结束)' : '边界模式：无边界(循环穿墙)' }}
+          <br>游戏速度：{{ speedPercentage }}%
+        </div>
         <div class="modal-buttons">
           <button class="modal-button primary" @click="startGame">重新开始</button>
           <button class="modal-button secondary" @click="handleStopGame">关闭</button>
@@ -271,6 +275,7 @@ onUnmounted(() => {
     </div>
 
     <GameInstructions />
+    <Footer />
   </div>
 </template>
 
