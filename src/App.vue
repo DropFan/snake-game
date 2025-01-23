@@ -21,6 +21,7 @@ import { GameOverType } from './game/GameState'
 import { GameStorage } from './game/GameStorage'
 
 import GameTitle from './components/GameTitle.vue'
+import GameSettings from './components/GameSettings.vue'
 import GameInstructions from './components/GameInstructions.vue'
 import Footer from './components/Footer.vue'
 
@@ -228,33 +229,14 @@ onUnmounted(() => {
         </button>
       </div>
 
-      <div class="settings-panel">
-        <div class="settings-section">
-          <h3>游戏设置</h3>
-          <label class="setting-item">
-            <input type="checkbox" v-model="boundaryMode" :disabled="gameRunning">
-            <span class="setting-text">启用边界模式（撞墙结束游戏）</span>
-          </label>
-          <div class="setting-item speed-setting">
-            <span class="setting-text">游戏速度</span>
-            <input type="range" v-model="speedPercentage" :min="0" :max="100" :step="1"
-              @input="updateGameSpeed(speedPercentage)" :disabled="gameRunning">
-            <span class="speed-value">{{ speedPercentage }}%</span>
-          </div>
-        </div>
-
-        <div class="settings-section">
-          <h3>音频设置</h3>
-          <label class="setting-item">
-            <input type="checkbox" v-model="bgMusicEnabled" @change="() => gameEngine?.audioManager.toggleBackgroundMusic()">
-            <span class="setting-text">🔊 背景音乐</span>
-          </label>
-          <label class="setting-item">
-            <input type="checkbox" v-model="soundEffectsEnabled" @change="() => gameEngine?.audioManager.toggleSoundEffects()">
-            <span class="setting-text">🔊 音效</span>
-          </label>
-        </div>
-      </div>
+      <GameSettings
+        v-model:boundaryMode="boundaryMode"
+        v-model:speedPercentage="speedPercentage"
+        v-model:bgMusicEnabled="bgMusicEnabled"
+        v-model:soundEffectsEnabled="soundEffectsEnabled"
+        :gameRunning="gameRunning"
+        @speedChange="updateGameSpeed"
+      />
     </div>
 
     <!-- 游戏结束弹窗 -->
