@@ -29,7 +29,7 @@ const currentYear = new Date().getFullYear();
 .footer-content {
   text-align: center;
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(25, 25, 25, 0.6);
 }
 
 .copyright, .github-link {
