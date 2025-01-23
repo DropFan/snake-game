@@ -21,6 +21,7 @@ import { GameOverType } from './game/GameState'
 import { GameStorage } from './game/GameStorage'
 
 import GameTitle from './components/GameTitle.vue'
+import GameOverModal from './components/GameOverModal.vue'
 import GameSettings from './components/GameSettings.vue'
 import GameInstructions from './components/GameInstructions.vue'
 import Footer from './components/Footer.vue'
@@ -239,22 +240,15 @@ onUnmounted(() => {
       />
     </div>
 
-    <!-- 游戏结束弹窗 -->
-    <div v-if="gameOver" class="modal-overlay">
-      <div class="modal-content">
-        <h2 class="modal-title">游戏结束</h2>
-        <div class="modal-score">得分: {{ score }}</div>
-        <div class="modal-message">{{ gameOverMessage }}</div>
-        <div class="modal-message modal-game-setting">
-          {{ boundaryMode ? '边界模式：有边界(撞墙结束)' : '边界模式：无边界(循环穿墙)' }}
-          <br>游戏速度：{{ speedPercentage }}%
-        </div>
-        <div class="modal-buttons">
-          <button class="modal-button primary" @click="startGame">重新开始</button>
-          <button class="modal-button secondary" @click="handleStopGame">关闭</button>
-        </div>
-      </div>
-    </div>
+    <GameOverModal
+      v-if="gameOver"
+      :score="score"
+      :gameOverMessage="gameOverMessage"
+      :boundaryMode="boundaryMode"
+      :speedPercentage="speedPercentage"
+      @restart="startGame"
+      @close="handleStopGame"
+    />
 
     <GameInstructions />
     <Footer />
@@ -264,6 +258,4 @@ onUnmounted(() => {
 <style scoped>
 @import './styles/game.css';
 @import './styles/controls.css';
-@import './styles/modal.css';
-@import './styles/settings.css';
 </style>
