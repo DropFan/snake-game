@@ -12,8 +12,10 @@ import { ref } from 'vue'
 import { GameStorage } from '../game/GameStorage'
 import GameRecord from '../game/GameRecord'
 import BaseModal from './BaseModal.vue'
+import GameRecordModal from './GameRecordModal.vue'
 
 const playerName = ref('')
+const showRecordList = ref(false)
 
 const props = defineProps({
   // 游戏得分
@@ -61,12 +63,21 @@ const saveRecord = () => {
     alert('游戏记录保存失败，请检查浏览器本地存储空间')
   }
 }
+
+// 打开记录列表
+const openRecordList = () => {
+  showRecordList.value = true
+}
+
+// 关闭记录列表
+const closeRecordList = () => {
+  showRecordList.value = false
+}
 </script>
 
 <template>
   <BaseModal :show="true" title="游戏结束" @close="$emit('close')">
-
-      <div class="modal-score">得分: {{ score }}</div>
+      <div class="modal-message">分数: <span class="modal-score">{{ score }}</span></div>
       <div class="modal-message">{{ gameOverMessage }}</div>
       <div class="modal-message modal-game-setting">
         {{ boundaryMode ? '边界模式：有边界(撞墙结束)' : '边界模式：无边界(循环穿墙)' }}
@@ -83,7 +94,7 @@ const saveRecord = () => {
           >
           <div class="modal-buttons">
             <button class="modal-button save-record" @click="saveRecord">保存记录</button>
-            <button class="modal-button view-record" @click="">查看记录</button>
+            <button class="modal-button view-record" @click="openRecordList">查看记录</button>
           </div>
         </div>
       </div>
@@ -92,6 +103,8 @@ const saveRecord = () => {
         <button class="modal-button secondary" @click="$emit('close')">关闭</button>
       </div>
   </BaseModal>
+
+  <GameRecordModal v-if="showRecordList" @close="closeRecordList" />
 </template>
 <style scoped>
 .modal-score {
@@ -127,5 +140,4 @@ const saveRecord = () => {
 .player-name-input::placeholder {
     color: rgba(22, 22, 22, 0.6);
 }
-
 </style>

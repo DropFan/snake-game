@@ -50,23 +50,24 @@ const emit = defineEmits(['close'])
 
 .modal-content {
   background-color: white;
-  padding: 2rem;
+  padding: 1rem;
   border-radius: 8px;
   text-align: center;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   max-width: 90%;
-  width: 22rem;
+  min-width: 20rem;
 }
 
 .modal-title {
   font-size: 1.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   color: #333;
 }
 
 .modal-message {
   font-size: 1.1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   color: #666;
 }
 
@@ -76,8 +77,6 @@ const emit = defineEmits(['close'])
   margin: 1rem;
   justify-content: center;
 }
-
-
 
 .modal-button {
   min-width: 100px;
