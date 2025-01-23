@@ -6,6 +6,8 @@
  * - 游戏速度调节
  * - 音频控制（背景音乐和音效）
  */
+import { onMounted, watch } from 'vue'
+import { GameStorage } from '../game/GameStorage'
 
 const props = defineProps({
   // 游戏运行状态
@@ -51,7 +53,37 @@ const handleSpeedChange = (event) => {
   const value = Number(event.target.value)
   emit('update:speedPercentage', value)
   emit('speedChange', value)
+  saveSettings()
 }
+
+// 保存所有游戏设置到本地存储
+const saveSettings = () => {
+  const settings = {
+    boundaryMode: props.boundaryMode,
+    speedPercentage: props.speedPercentage,
+    bgMusicEnabled: props.bgMusicEnabled,
+    soundEffectsEnabled: props.soundEffectsEnabled
+  }
+  GameStorage.saveSettings(settings)
+}
+
+// 监听所有设置的变更
+watch(() => props.boundaryMode, () => saveSettings())
+watch(() => props.bgMusicEnabled, () => saveSettings())
+watch(() => props.soundEffectsEnabled, () => saveSettings())
+
+// 组件挂载时加载保存的设置
+onMounted(() => {
+  const savedSettings = GameStorage.loadSettings()
+  if (savedSettings) {
+    emit('update:boundaryMode', savedSettings.boundaryMode)
+    emit('update:speedPercentage', savedSettings.speedPercentage)
+    emit('update:bgMusicEnabled', savedSettings.bgMusicEnabled)
+    emit('update:soundEffectsEnabled', savedSettings.soundEffectsEnabled)
+    emit('speedChange', savedSettings.speedPercentage)
+  }
+});
+
 </script>
 
 <template>
