@@ -45,8 +45,8 @@ const formatDateTime = (timestamp) => {
 <template>
   <BaseModal :show="true" title="游戏记录" @close="$emit('close')">
     <div class="records-panel">
-      <div class="records-header">
-        /// 游/戏/记/录/
+      <div class="modal-message">
+        注：当前只有本地保存的游戏记录
       </div>
       <div class="records-content" v-if="records.length > 0">
         <table class="records-table">
@@ -146,7 +146,8 @@ const formatDateTime = (timestamp) => {
 
 .records-table th,
 .records-table td {
-  padding: 0.8rem 1rem;
+  min-width: 4em;
+  padding: 0.4rem 0.4rem;
   text-align: left;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
