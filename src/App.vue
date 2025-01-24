@@ -24,6 +24,7 @@ import GameTitle from './components/GameTitle.vue'
 import GameOverModal from './components/GameOverModal.vue'
 import GameSettings from './components/GameSettings.vue'
 import GameInstructions from './components/GameInstructions.vue'
+import GameRecordModal from './components/GameRecordModal.vue'
 import Footer from './components/Footer.vue'
 
 // 游戏状态管理
@@ -37,6 +38,7 @@ const bgMusicEnabled = ref(AudioManager.bgMusicEnabled)      // 背景音乐开�
 const soundEffectsEnabled = ref(AudioManager.soundEffectsEnabled) // 音效开关状态
 const speedPercentage = ref(50)       // 游戏速度百分比，0%最慢，100%最快
 const gameOverMessage = ref('')       // 游戏结束原因
+const showRecordList = ref(false)      // 是否显示历史记录列表
 
 // 游戏状态管理函数
 const handleGameStateChange = (state) => {
@@ -213,7 +215,10 @@ onUnmounted(() => {
     <canvas ref="canvas" :width="canvasSize" :height="canvasSize" class="game-canvas"></canvas>
 
     <div class="game-controls">
-      <div class="score">得分: {{ score }}</div>
+      <div class="score-container">
+        <div class="score">得分: {{ score }}</div>
+        <a href="#" @click.prevent="showRecordList = true" class="view-record-link">查看记录</a>
+      </div>
 
       <!-- :disabled="gameEngine && (!gameOver)" -->
       <div class="button-group">
@@ -252,6 +257,8 @@ onUnmounted(() => {
 
     <GameInstructions />
     <Footer />
+
+    <GameRecordModal v-if="showRecordList" @close="showRecordList = false" />
   </div>
 </template>
 
