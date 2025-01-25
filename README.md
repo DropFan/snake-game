@@ -19,8 +19,8 @@
 - 游戏速度调节（0-100%可调）
 - 完整的音频系统，支持背景音乐和音效控制
 - 游戏结束弹窗显示最终得分和结束原因
-- 游戏设置本地存储功能 (TODO)
-- 游戏记录保存与历史排名 (TODO)
+- 游戏设置本地存储功能
+- 游戏记录保存与历史排名
 
 ## 游戏玩法
 
@@ -89,8 +89,15 @@ src/
 │   ├── GameRenderer.js  # 画布渲染
 │   ├── GameConfig.js    # 游戏配置
 │   ├── GameStorage.js   # 本地存储管理
+│   ├── GameRecord.js    # 游戏记录管理
 │   └── AudioManager.js  # 音频管理
 ├── components/     # Vue组件
+│   ├── GameTitle.vue    # 游戏标题组件
+│   ├── GameSettings.vue # 游戏设置组件
+│   ├── GameInstructions.vue # 游戏说明组件
+│   ├── GameOverModal.vue    # 游戏结束弹窗
+│   ├── GameRecordModal.vue  # 游戏记录弹窗
+│   └── BaseModal.vue        # 基础弹窗组件
 ├── styles/         # CSS样式文件
 │   ├── game.css        # 游戏主样式
 │   ├── controls.css    # 控制面板样式
@@ -126,21 +133,27 @@ public/
 - 触摸事件处理
 - 方向控制逻辑
 
-### 渲染系统 (GameRenderer)
+### 渲染模块 (GameRenderer)
 - Canvas渲染
 - 响应式布局
 - 动画效果
 
-### 音频系统 (AudioManager)
+### 音频模块 (AudioManager)
 - Web Audio API集成
 - 背景音乐控制
 - 音效管理
 - 音频状态持久化
 
-### 存储系统 (GameStorage)
+### 存储模块 (GameStorage)
 - 游戏设置本地存储
 - 设置自动加载
 - 数据持久化处理
+
+### 记录模块 (GameRecord)
+- 游戏记录保存
+- 历史记录查看
+- 最高分排行榜
+- 记录数据持久化
 
 ## 贡献
 

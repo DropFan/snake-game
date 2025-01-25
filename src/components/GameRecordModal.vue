@@ -63,7 +63,7 @@ const formatDateTime = (timestamp) => {
             <tr v-for="record in records" :key="record.timestamp">
               <td>{{ record.playerName }}</td>
               <td>{{ record.score }}</td>
-              <td>{{ record.boundaryMode ? '有边界' : '无边界' }}</td>
+              <td>{{ record.boundaryMode ? '有边界(撞墙结束)' : '无边界(循环穿墙)' }}</td>
               <td>{{ record.speedPercentage }}%</td>
               <td>{{ formatDateTime(record.timestamp) }}</td>
             </tr>
